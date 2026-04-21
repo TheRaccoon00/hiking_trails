@@ -92,20 +92,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const Divider(),
-          SwitchListTile(
-            title: Text(
-              AppLocalizations.t('useCloud'),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(AppLocalizations.t('useCloudDesc')),
-            activeThumbColor: const Color(0xFFFF5F1F),
-            value: SettingsService.useCloudApi,
-            onChanged: (val) async {
-              await SettingsService.setUseCloudApi(val);
-              setState(() {});
-            },
-          ),
-          const Divider(),
           const SizedBox(height: 16),
           _buildAboutSection(),
           const SizedBox(height: 32),
@@ -165,7 +151,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+6'),
+          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+7'),
           _buildInfoRow(AppLocalizations.t('developer'), 'Clement Foissard'),
           const SizedBox(height: 20),
           Center(
@@ -191,12 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(
-                      'https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg',
-                      height: 20,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.coffee, color: Colors.black),
-                    ),
+                    const Icon(Icons.coffee, color: Colors.black),
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.t('buyMeCoffee'),

@@ -36,6 +36,12 @@ class HikingApp extends StatelessWidget {
             appBarTheme: const AppBarTheme(
               backgroundColor: Color(0xFF1A2F25),
               foregroundColor: Colors.white,
+              titleTextStyle: TextStyle(
+                fontFamily: 'NunitoTitle',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Color(0xFFF9FAFB),

@@ -91,4 +91,33 @@ class CloudApiService {
       throw Exception("Cloud API Search Error: ${response.statusCode}");
     }
   }
+
+  static Future<Trail?> getTrailById(String id) async {
+    final uri = Uri.parse("$endpoint?id=$id");
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final List<dynamic> trailsJson = data['trails'] ?? [];
+      if (trailsJson.isEmpty) return null;
+
+      final element = trailsJson.first;
+      List<List<LatLng>> segments = [];
+      if (element['segments'] != null) {
+        for (var segment in element['segments']) {
+          List<LatLng> coords = (segment as List).map((pt) {
+            return LatLng((pt[0] as num).toDouble(), (pt[1] as num).toDouble());
+          }).toList();
+          segments.add(coords);
+        }
+      }
+      try {
+        return Trail.fromJson(element, segments);
+      } catch (e) {
+        String name = element['tags']?['name'] ?? "Sentier inconnu";
+        return Trail(id: id, name: name, coordinateSegments: segments);
+      }
+    }
+    return null;
+  }
 }

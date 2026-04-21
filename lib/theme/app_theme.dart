@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Brand Colors
@@ -17,7 +16,8 @@ class AppTheme {
   static const Color selectionGlow = Color(0xFFFF8A5C); // Warmer glow for selection
 
   // Text Styles
-  static TextStyle get titleStyle => GoogleFonts.nunito(
+  static TextStyle get titleStyle => const TextStyle(
+        fontFamily: 'NunitoTitle',
         fontWeight: FontWeight.bold,
         color: darkGreen,
       );

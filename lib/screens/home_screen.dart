@@ -3,10 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../services/settings_service.dart';
-import '../services/offline_data_service.dart';
 import '../services/cloud_api_service.dart';
 import '../services/favorites_service.dart';
 import '../l10n/app_localizations.dart';
@@ -39,10 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // Zone-based fetching
   final Set<String> _fetchedZoneKeys = {};
   double _currentZoom = 8.0;
+  
+  late Future<List<Trail>> _favoritesFuture;
 
   @override
   void initState() {
     super.initState();
+    _favoritesFuture = FavoritesService.getFavoriteTrails();
     _initApp();
   }
 
@@ -149,13 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
         LatLng(north.clamp(-90.0, 90.0), east.clamp(-180.0, 180.0)),
       );
 
-      List<Trail> trails;
-      if (SettingsService.useCloudApi) {
-        trails = await CloudApiService.getTrailsInBounds(bounds);
-      } else {
-        await OfflineDataService.loadOfflineData();
-        trails = await OfflineDataService.getTrailsInBounds(bounds);
-      }
+      List<Trail> trails = await CloudApiService.getTrailsInBounds(bounds);
 
       if (!mounted) return;
       setState(() {
@@ -293,7 +288,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           'Otavia trails',
-          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontFamily: 'NunitoTitle',
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
@@ -353,6 +351,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            if (index == 1) {
+              _favoritesFuture = FavoritesService.getFavoriteTrails();
+            }
           });
         },
         items: [
@@ -448,7 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
       content = Stack(
         children: [
           FutureBuilder<List<Trail>>(
-            future: FavoritesService.getFavoriteTrails(),
+            future: _favoritesFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());

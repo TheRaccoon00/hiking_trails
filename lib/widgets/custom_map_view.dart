@@ -240,6 +240,9 @@ class _CustomMapViewState extends State<CustomMapView> {
           options: MapOptions(
             initialCenter: widget.initialCenter,
             initialZoom: widget.initialZoom,
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+            ),
             onTap: (tapPosition, point) {
               // Optimized hit-test: only check start point of each trail
               double closestDist = double.infinity;
@@ -327,22 +330,6 @@ class _CustomMapViewState extends State<CustomMapView> {
               ),
           ],
         ),
-        if (_rotation != 0)
-          Positioned(
-            top: 16, right: 16,
-            child: FloatingActionButton.small(
-              heroTag: 'compass',
-              backgroundColor: Colors.white.withValues(alpha: 0.8),
-              onPressed: () {
-                widget.mapController.rotate(0);
-                setState(() { _rotation = 0; });
-              },
-              child: Transform.rotate(
-                angle: -_rotation * (3.14159 / 180),
-                child: const Icon(Icons.explore, color: AppTheme.darkGreen, size: 24),
-              ),
-            ),
-          ),
       ],
     );
   }

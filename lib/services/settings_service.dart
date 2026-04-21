@@ -22,10 +22,6 @@ class SettingsService {
     await _prefs.setString('language', lang);
   }
 
-  static bool get useCloudApi => _prefs.getBool('use_cloud_api') ?? true;
-  static Future<void> setUseCloudApi(bool val) async {
-    await _prefs.setBool('use_cloud_api', val);
-  }
 
   static double? get lastLat => _prefs.getDouble('last_lat');
   static double? get lastLon => _prefs.getDouble('last_lon');

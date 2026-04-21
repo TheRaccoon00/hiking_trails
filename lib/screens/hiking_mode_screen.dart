@@ -205,7 +205,11 @@ class _HikingModeScreenState extends State<HikingModeScreen> {
                   Expanded(
                     child: Text(
                       widget.trail.name,
-                      style: GoogleFonts.nunito(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                        fontFamily: 'NunitoTitle',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
