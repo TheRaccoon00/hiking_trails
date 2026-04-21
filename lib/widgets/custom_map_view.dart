@@ -146,11 +146,11 @@ class _CustomMapViewState extends State<CustomMapView> {
       if (isSelected) {
         color = AppTheme.neonOrange; baseWeight = 5.0;
       } else if (trail.importance >= 80) {
-        color = AppTheme.emeraldGR; baseWeight = 4.0;
+        color = AppTheme.trailDarkGreen; baseWeight = 4.0;
       } else if (trail.importance >= 55) {
-        color = AppTheme.forestRegional; baseWeight = 2.5;
+        color = AppTheme.trailLightGreen; baseWeight = 2.5;
       } else {
-        color = AppTheme.sageLocal; baseWeight = 1.2;
+        color = AppTheme.trailGrey; baseWeight = 1.2;
       }
 
       double markerSize = (10.0 + (trail.importance / 100.0) * 18.0) * zoomScale;

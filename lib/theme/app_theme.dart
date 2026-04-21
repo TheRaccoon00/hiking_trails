@@ -10,10 +10,10 @@ class AppTheme {
   static const Color grayUnselected = Color(0xFF9CA3AF);
   static const Color grayText = Colors.black54;
 
-  // Trail Tier Colors (Premium Palette)
-  static const Color emeraldGR = Color(0xFF064E3B); // Deep Emerald for Top Tier
-  static const Color forestRegional = Color(0xFF059669); // More saturated Forest
-  static const Color sageLocal = Color(0xFF9CA3AF); // Standard Gray for Local
+  // Trail Tier Colors
+  static const Color trailDarkGreen = Color(0xFF064E3B);
+  static const Color trailLightGreen = Color(0xFF059669);
+  static const Color trailGrey = Color(0xFF9CA3AF);
   static const Color selectionGlow = Color(0xFFFF8A5C); // Warmer glow for selection
 
   // Text Styles

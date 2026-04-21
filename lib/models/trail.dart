@@ -1,5 +1,4 @@
 import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:math';
 
 class Trail {
@@ -8,7 +7,6 @@ class Trail {
   final List<List<LatLng>> coordinateSegments;
   final String? from;
   final String? to;
-  double? distanceToUser;
   final double lengthKm;
   final int importance;
   final double? ascent;
@@ -20,12 +18,32 @@ class Trail {
     required this.coordinateSegments,
     this.from,
     this.to,
-    this.distanceToUser,
     this.lengthKm = 0.0,
     this.importance = 10,
     this.ascent,
     this.descent,
   });
+
+  static String _sanitizeName(String name) {
+    return name
+        .replaceAll(RegExp(r'[®™©]'), '')
+        .replaceAllMapped(RegExp(r'\bGR(\d+)?\b', caseSensitive: false), (match) {
+          final digits = match.group(1);
+          return digits == null ? 'Sentier' : 'Sentier $digits';
+        })
+        .replaceAllMapped(RegExp(r'\bGRP(\d+)?\b', caseSensitive: false), (match) {
+          final digits = match.group(1);
+          return digits == null ? 'Itinéraire régional' : 'Itinéraire régional $digits';
+        })
+        .replaceAllMapped(RegExp(r'\bPR(\d+)?\b', caseSensitive: false), (match) {
+          final digits = match.group(1);
+          return digits == null ? 'Sentier local' : 'Sentier local $digits';
+        })
+        .replaceAll(RegExp(r'Grande Randonn[ée]e', caseSensitive: false), 'Sentier de randonnée')
+        .replaceAll(RegExp(r'Petite Randonn[ée]e', caseSensitive: false), 'Sentier de promenade')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+  }
 
   factory Trail.fromJson(
     Map<String, dynamic> json,
@@ -62,7 +80,7 @@ class Trail {
 
     return Trail(
       id: json['id'].toString(),
-      name: finalName,
+      name: _sanitizeName(finalName),
       coordinateSegments: segments,
       from: fromTag,
       to: toTag,
@@ -81,7 +99,7 @@ class Trail {
 
     return Trail(
       id: json['id'],
-      name: json['name'],
+      name: _sanitizeName(json['name']),
       coordinateSegments: segments,
       from: json['from'],
       to: json['to'],
@@ -118,26 +136,5 @@ class Trail {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
-  }
-
-  void calculateDistanceToUser(double userLat, double userLon) {
-    if (coordinateSegments.isEmpty) return;
-
-    double minDistance = double.infinity;
-    for (var segment in coordinateSegments) {
-      for (var point in segment) {
-        double distance = Geolocator.distanceBetween(
-          userLat,
-          userLon,
-          point.latitude,
-          point.longitude,
-        );
-        if (distance < minDistance) {
-          minDistance = distance;
-        }
-      }
-    }
-
-    distanceToUser = minDistance;
   }
 }

@@ -165,7 +165,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+5'),
+          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+6'),
           _buildInfoRow(AppLocalizations.t('developer'), 'Clement Foissard'),
           const SizedBox(height: 20),
           Center(

@@ -1,0 +1,22 @@
+Analyzing hiking_trails...                                      
+
+warning • The declaration '_calculateSmartImportance' isn't referenced • lib/models/trail.dart:236:14 • unused_element
+warning • The declaration '_formatCleanName' isn't referenced • lib/models/trail.dart:250:17 • unused_element
+   info • Statements in an if should be enclosed in a block • lib/screens/home_screen.dart:328:17 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/screens/home_screen.dart:333:17 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/screens/home_screen.dart:373:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/screens/home_screen.dart:418:17 • curly_braces_in_flow_control_structures
+warning • Unused import: 'package:flutter_map/flutter_map.dart' • lib/services/cloud_api_service.dart:4:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/theme/app_theme.dart:58:51 • deprecated_member_use
+   info • The type name 'mbx_bounds' isn't an UpperCamelCase identifier • lib/widgets/custom_map_view.dart:40:9 • camel_case_types
+   info • Don't use 'BuildContext's across async gaps • lib/widgets/custom_map_view.dart:212:45 • use_build_context_synchronously
+warning • Unnecessary type check; the result is always 'true' • lib/widgets/custom_map_view.dart:244:32 • unnecessary_type_check
+warning • The declaration '_getColorForImportance' isn't referenced • lib/widgets/custom_map_view.dart:299:7 • unused_element
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:121:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:163:11 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:170:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:179:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:207:11 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/widgets/trail_list_view.dart:214:9 • curly_braces_in_flow_control_structures
+
+18 issues found. (ran in 2.6s)

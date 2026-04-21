@@ -45,24 +45,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   void _resumeSession(HistoryEntry entryMetadata) async {
     if (_isProcessing) return;
-    
+
     setState(() {
       _isProcessing = true;
       _resumingId = entryMetadata.id;
     });
 
     final messenger = ScaffoldMessenger.of(context);
-    
+
     try {
       // 1. Load the full entry with the GPS path
       final fullEntry = await HistoryService.getFullEntry(entryMetadata.id);
-      
+
       if (fullEntry == null) {
-        if (mounted) setState(() {
-          _isProcessing = false;
-          _resumingId = null;
-        });
-        messenger.showSnackBar(const SnackBar(content: Text("Fichier de session introuvable")));
+        if (mounted) {
+          setState(() {
+            _isProcessing = false;
+            _resumingId = null;
+          });
+        }
+        messenger.showSnackBar(
+          const SnackBar(content: Text("Fichier de session introuvable")),
+        );
         return;
       }
 
@@ -87,10 +91,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => HikingModeScreen(
-            trail: trail!,
-            existingSession: fullEntry,
-          ),
+          builder: (_) =>
+              HikingModeScreen(trail: trail!, existingSession: fullEntry),
         ),
       ).then((_) {
         if (mounted) {
@@ -109,7 +111,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
         });
       }
       messenger.showSnackBar(
-        SnackBar(content: Text("Erreur lors de la reprise: $e"), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text("Erreur lors de la reprise: $e"),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -118,81 +123,105 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.t('history'),
-            style: GoogleFonts.nunito(fontWeight: FontWeight.bold)),
+        title: Text(
+          AppLocalizations.t('history'),
+          style: GoogleFonts.nunito(fontWeight: FontWeight.bold),
+        ),
       ),
       body: _history == null
           ? const Center(child: CircularProgressIndicator())
           : _history!.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.history, size: 64, color: AppTheme.grayUnselected),
-                      const SizedBox(height: 16),
-                      Text("Aucun historique pour le moment",
-                          style: TextStyle(color: AppTheme.grayUnselected)),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.history, size: 64, color: AppTheme.grayUnselected),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Aucun historique pour le moment",
+                    style: TextStyle(color: AppTheme.grayUnselected),
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _history!.length,
-                  itemBuilder: (context, index) {
-                    final entry = _history![index];
-                    final isResumingThis = _resumingId == entry.id;
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _history!.length,
+              itemBuilder: (context, index) {
+                final entry = _history![index];
+                final isResumingThis = _resumingId == entry.id;
 
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      child: ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppTheme.darkGreen.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.hiking, color: AppTheme.darkGreen),
-                        ),
-                        title: Text(entry.trailName,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(
-                          "${entry.startTime.day}/${entry.startTime.month} • ${_formatDuration(entry.elapsedSeconds)} • ${entry.pointsCount} pts",
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (isResumingThis)
-                              const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.neonOrange),
-                                ),
-                              )
-                            else
-                              IconButton(
-                                icon: const Icon(Icons.play_arrow, color: AppTheme.neonOrange),
-                                onPressed: _isProcessing ? null : () => _resumeSession(entry),
-                              ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline, color: Colors.red),
-                              onPressed: _isProcessing ? null : () async {
-                                setState(() => _isProcessing = true);
-                                await HistoryService.deleteEntry(entry.id);
-                                if (mounted) {
-                                  setState(() => _isProcessing = false);
-                                  _loadHistory();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.darkGreen.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
                       ),
-                    );
-                  },
-                ),
+                      child: const Icon(
+                        Icons.hiking,
+                        color: AppTheme.darkGreen,
+                      ),
+                    ),
+                    title: Text(
+                      entry.trailName,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      "${entry.startTime.day}/${entry.startTime.month} • ${_formatDuration(entry.elapsedSeconds)} • ${entry.pointsCount} pts",
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isResumingThis)
+                          const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppTheme.neonOrange,
+                              ),
+                            ),
+                          )
+                        else
+                          IconButton(
+                            icon: const Icon(
+                              Icons.play_arrow,
+                              color: AppTheme.neonOrange,
+                            ),
+                            onPressed: _isProcessing
+                                ? null
+                                : () => _resumeSession(entry),
+                          ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.red,
+                          ),
+                          onPressed: _isProcessing
+                              ? null
+                              : () async {
+                                  setState(() => _isProcessing = true);
+                                  await HistoryService.deleteEntry(entry.id);
+                                  if (mounted) {
+                                    setState(() => _isProcessing = false);
+                                    _loadHistory();
+                                  }
+                                },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

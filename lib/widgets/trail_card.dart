@@ -288,54 +288,34 @@ class TrailCard extends StatelessWidget {
   }
 
   Widget _buildTrailSymbol() {
-    Color topColor;
-    Color? bottomColor;
-    bool isDouble = true;
+    Color symbolColor;
 
     if (trail.importance >= 80) {
-      // GR: White over Red
-      topColor = Colors.white;
-      bottomColor = Colors.red;
+      symbolColor = AppTheme.trailDarkGreen;
     } else if (trail.importance >= 55) {
-      // GRP: Yellow over Red
-      topColor = Colors.yellow;
-      bottomColor = Colors.red;
+      symbolColor = AppTheme.trailLightGreen;
     } else {
-      // PR: Yellow dash
-      topColor = Colors.yellow;
-      isDouble = false;
+      symbolColor = AppTheme.trailGrey;
     }
 
     return Container(
       width: 24,
       height: 24,
       alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 14,
-            height: 3.5,
-            decoration: BoxDecoration(
-              color: topColor,
-              borderRadius: BorderRadius.circular(1),
-              border: isSelected && topColor == Colors.white 
-                  ? Border.all(color: Colors.black12, width: 0.5) 
-                  : null,
-            ),
-          ),
-          if (isDouble) ...[
-            const SizedBox(height: 2.5),
-            Container(
-              width: 14,
-              height: 3.5,
-              decoration: BoxDecoration(
-                color: bottomColor,
-                borderRadius: BorderRadius.circular(1),
-              ),
-            ),
+      child: Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          color: symbolColor,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: symbolColor.withValues(alpha: 0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            )
           ],
-        ],
+        ),
       ),
     );
   }
