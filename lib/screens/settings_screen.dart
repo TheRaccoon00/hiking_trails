@@ -151,46 +151,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+8'),
+          _buildInfoRow(AppLocalizations.t('version'), '1.0.0+9'),
           _buildInfoRow(AppLocalizations.t('developer'), 'Clement Foissard'),
-          const SizedBox(height: 20),
-          Center(
-            child: InkWell(
-              onTap: () async {
-                // Generic placeholder for Buy Me a Coffee
-                final url = Uri.parse(
-                  'https://www.buymeacoffee.com/clementfoissard',
-                );
-                // if (await canLaunchUrl(url)) {
-                await launchUrl(url, mode: LaunchMode.externalApplication);
-                // }
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFDD00),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.coffee, color: Colors.black),
-                    const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.t('buyMeCoffee'),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
